@@ -20,7 +20,7 @@ func (b *Bot) handleCommand(message *tgbotapi.Message) error {
 	case commandStart:
 		msg := tgbotapi.NewMessage(message.Chat.ID, text)
 		if _, err := b.bot.Send(msg); err != nil {
-			b.lgr.Fatal(err)
+			return err
 		}
 	default:
 		return errors.New("Invalid type of command! ")
@@ -32,7 +32,7 @@ func (b *Bot) handleLocation(message *tgbotapi.Message) error {
 	lon := message.Location.Longitude
 	lat := message.Location.Latitude
 	if err := b.handleSendMessage(lon, lat, message); err != nil {
-		b.lgr.Fatal(err)
+		return err
 	}
 	return nil
 }
@@ -40,7 +40,7 @@ func (b *Bot) handleLocation(message *tgbotapi.Message) error {
 func (b *Bot) handleSendMessage(lon, lat float64, message *tgbotapi.Message) error {
 	msg, err := b.getWeatherInfo(lon, lat, message)
 	if err != nil {
-		b.lgr.Fatal(err)
+		return err
 	}
 	msg.ParseMode = "markdown"
 	if _, err := b.bot.Send(msg); err != nil {

@@ -12,7 +12,6 @@ func (b *Bot) handleParamForWeather(message Message) string {
 	pressure := b.handlePressure(message.Main.Pressure)
 	humidity := message.Main.Humidity
 	windSpeed := message.Wind.Speed
-	windGust := message.Wind.Gust
 	clouds := message.Clouds.All
 	sunrise := b.handleDate(message.Sys.Sunrise)
 	sunset := b.handleDate(message.Sys.Sunset)
@@ -25,7 +24,6 @@ func (b *Bot) handleParamForWeather(message Message) string {
 		"*Атмосферний тиск:* _%.1f мм.рт.ст._\n"+
 		"*Вологість повітря у відсотках:* _%d_\n"+
 		"*Швидкість вітру :* _%.2f м/с_\n"+
-		"*Пориви вітру до:* _%.2f м/с_\n"+
 		"*Хмарність у відсотках:* _%d_\n"+
 		"*Світанок:* _%s_\n"+
 		"*Закат:* _%s_\n",
@@ -36,7 +34,6 @@ func (b *Bot) handleParamForWeather(message Message) string {
 		pressure,
 		humidity,
 		windSpeed,
-		windGust,
 		clouds,
 		sunrise,
 		sunset)
