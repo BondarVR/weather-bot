@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func (b *Bot) handleParamForWeather(message Message) string {
+func (b *Bot) handleParamForWeather(message *Message) string {
 	description := message.Weather[0].Description
 	mainTemp := b.handleTemperature(message.Main.Temp)
 	feelsLike := b.handleTemperature(message.Main.FeelsLike)

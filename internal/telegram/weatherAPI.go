@@ -63,34 +63,34 @@ type Sys struct {
 	Sunset  int    `json:"sunset"`
 }
 
-func (b *Bot) getWeatherInfo(lon, lat float64, message *tgbotapi.Message) (tgbotapi.MessageConfig, error) {
+func (b *Bot) getWeatherInfo(lon, lat float64, message *tgbotapi.Message) (*tgbotapi.MessageConfig, error) {
 	requestURL := fmt.Sprintf("https://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&lang=ua&appid=%s", lat, lon, b.cfg.ApiWeather)
 
 	resp, err := http.Get(requestURL)
 	if err != nil {
-		b.lgr.Fatal(err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 
 	value, err := b.unmarshalJSON(resp)
 	if err != nil {
-		b.lgr.Fatal(err)
+		return nil, err
 	}
 
 	text := b.handleParamForWeather(value)
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, text)
-	return msg, nil
+	return &msg, nil
 }
 
-func (b *Bot) unmarshalJSON(response *http.Response) (Message, error) {
+func (b *Bot) unmarshalJSON(response *http.Response) (*Message, error) {
 	var v Message
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
-		b.lgr.Fatal(err)
+		return nil, err
 	}
 	if err := json.Unmarshal(body, &v); err != nil {
-		b.lgr.Fatal(err)
+		return nil, err
 	}
-	return v, nil
+	return &v, nil
 }
